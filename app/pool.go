@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
+
 var pool *pgxpool.Pool
 
 func NewPool(config *pgxpool.Config) (*pgxpool.Pool, error) {
@@ -31,7 +32,7 @@ func NewPoolFromEnv() (*pgxpool.Pool, error) {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	db := os.Getenv("DB_NAME")
-	maxConn, err := strconv.ParseInt(os.Getenv("DB_MAX_CONN"),10,32)
+	maxConn, err := strconv.ParseInt(os.Getenv("DB_MAX_CONN"), 10, 32)
 	if err != nil {
 		log.Println("Error parsing max connection: ", err)
 		return nil, err
@@ -47,7 +48,7 @@ func NewPoolFromEnv() (*pgxpool.Pool, error) {
 	}
 	config.MaxConns = int32(maxConn)
 	config.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
-		if _, err := conn.Exec(ctx, fmt.Sprintf("SET search_path TO %s", searchPath)); err != nil{
+		if _, err := conn.Exec(ctx, fmt.Sprintf("SET search_path TO %s", searchPath)); err != nil {
 			return err
 		}
 		return nil

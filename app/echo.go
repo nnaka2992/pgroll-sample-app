@@ -25,9 +25,10 @@ func getUserByID(c echo.Context) error {
 	if err := row.Scan(&user.Id, &user.FirstName, &user.LastName, &user.DateOfBirth); err != nil {
 		return fmt.Errorf("Could not retrieve columns: ", err.Error())
 	}
-	b, err := json.Marshal(user); if err != nil {
+	b, err := json.Marshal(user)
+	if err != nil {
 		return fmt.Errorf("Could not marshal user: ", err.Error())
 	}
 
-	return c.String(http.StatusOK, string(b) + "\n")
+	return c.String(http.StatusOK, string(b)+"\n")
 }
