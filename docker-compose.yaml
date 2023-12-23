@@ -4,8 +4,51 @@ services:
     container_name: postgres
     image: postgres:16.1-alpine3.18
     restart: always
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
+    networks:
+      - net
+  app1:
+    container_name: app1
+    image: pgroll-sample-app:v1
+    restart: always
+    ports:
+      - "8081:8080"
+    environment:
+      PGPASSWORD: "postgres"
+      DB_USER: "role1"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_NAME: "sample"
+      DB_MAX_CONN: "10"
+      DB_SEARCH_PATH: "public"
+    depends_on:
+      - postgres
+    networks:
+      - net
+  app2:
+    container_name: app2
+    image: pgroll-sample-app:v1
+    restart: always
+    ports:
+      - "8082:8080"
+    environment:
+      PGPASSWORD: "postgres"
+      DB_USER: "role1"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_NAME: "sample"
+      DB_MAX_CONN: "10"
+      DB_SEARCH_PATH: "public"
+    depends_on:
+      - postgres
+    networks:
+      - net
+networks:
+  net:
+    driver: bridge
