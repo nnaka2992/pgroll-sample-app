@@ -7,14 +7,20 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/jackc/pgx/pgtype"
 )
 
 func createUser(c echo.Context) error {
 	user := generateUser()
-	if _, err := pool.Exec(context.Background(), "INSERT INTO users (first_name, last_name, date_of_birth) VALUES ($1, $2, $3)", &user.FirstName, &user.LastName, &user.DateOfBirth); err != nil {
-		return fmt.Errorf("Could not insert user: ", err.Error())
+	row := pool.QueryRow(context.Background(), "INSERT INTO users (first_name, last_name, date_of_birth) VALUES ($1, $2, $3) RETURNING id;", &user.FirstName, &user.LastName, &user.DateOfBirth)
+	if row == nil {
+		return fmt.Errorf("Could not insert user")
 	}
-	return c.String(http.StatusOK, "createUser")
+	var userId pgtype.Int8
+	if err := row.Scan(&userId); err != nil {
+		return fmt.Errorf("Could not retrieve id: ", err.Error())
+	}
+	return c.String(http.StatusOK, fmt.Sprintf("User with ID: %d is created\n", userId.Int))
 }
 
 func getUserByID(c echo.Context) error {
