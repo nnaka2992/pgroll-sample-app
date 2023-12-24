@@ -20,7 +20,7 @@
           },
           {
             "name": "date_of_birth",
-            "type": "timestamp"
+            "type": "date"
           }
         ]
       }

@@ -5,13 +5,14 @@ import (
 	"time"
 
 	"github.com/go-faker/faker/v4"
+	"github.com/jackc/pgx/pgtype"
 )
 
 type User struct {
-	Id          int64
-	FirstName   string
-	LastName    string
-	DateOfBirth time.Time
+	Id          pgtype.Int8
+	FirstName   pgtype.Varchar
+	LastName    pgtype.Varchar
+	DateOfBirth pgtype.Date
 }
 
 func generateUser() User {
@@ -20,9 +21,9 @@ func generateUser() User {
 		log.Println("Unable to parse date: ", err)
 	}
 	user := User{
-		FirstName:   faker.FirstName(),
-		LastName:    faker.LastName(),
-		DateOfBirth: date,
+		FirstName:   pgtype.Varchar{String: faker.FirstName(), Status: pgtype.Present},
+		LastName:    pgtype.Varchar{String: faker.LastName(), Status: pgtype.Present},
+		DateOfBirth: pgtype.Date{Time: date, Status: pgtype.Present},
 	}
 	return user
 }

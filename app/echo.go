@@ -21,7 +21,7 @@ func getUserByID(c echo.Context) error {
 	id := c.Param("id")
 
 	user := User{}
-	row := pool.QueryRow(context.Background(), "SELECT * FROM users WHERE id = $1", id)
+	row := pool.QueryRow(context.Background(), "SELECT id, first_name, last_name, date_of_birth FROM users WHERE id = $1", id)
 	if err := row.Scan(&user.Id, &user.FirstName, &user.LastName, &user.DateOfBirth); err != nil {
 		return fmt.Errorf("Could not retrieve columns: ", err.Error())
 	}
