@@ -13,6 +13,7 @@ type User struct {
 	FirstName   pgtype.Varchar
 	LastName    pgtype.Varchar
 	DateOfBirth pgtype.Date
+	Email       pgtype.Varchar
 }
 
 func generateUser() User {
@@ -24,6 +25,7 @@ func generateUser() User {
 		FirstName:   pgtype.Varchar{String: faker.FirstName(), Status: pgtype.Present},
 		LastName:    pgtype.Varchar{String: faker.LastName(), Status: pgtype.Present},
 		DateOfBirth: pgtype.Date{Time: date, Status: pgtype.Present},
+		Email:       pgtype.Varchar{String: faker.Email(), Status: pgtype.Present},
 	}
 	return user
 }
