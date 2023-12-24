@@ -26,7 +26,7 @@ services:
       DB_PORT: "5432"
       DB_NAME: "sample"
       DB_MAX_CONN: "10"
-      DB_SEARCH_PATH: "public"
+      DB_SEARCH_PATH: "public_users_create_table,public"
     depends_on:
       - postgres
     networks:
@@ -44,7 +44,7 @@ services:
       DB_PORT: "5432"
       DB_NAME: "sample"
       DB_MAX_CONN: "10"
-      DB_SEARCH_PATH: "public"
+      DB_SEARCH_PATH: "public_users_create_table,public"
     depends_on:
       - postgres
     networks:
